@@ -10,8 +10,14 @@
 
 ## Gif
 
-![](https://github.com/Zalexanninev15/Telegram-WebApp-Game/blob/main/demo.gif)
+<img src="https://github.com/Zalexanninev15/Telegram-WebApp-Game/blob/main/demo.gif" width="450" height="450"/>
 
 ## Описание
 
 Я создал простую игру в качестве примера для веб-приложения для моего бота в мессенджере Telegram. Вы также можете запустить его из обычного браузера
+
+## Как играть в Telegram боте
+
+Перейдите в моего Telegram бота [@z15tools_bot](https://t.me/z15tools_bot), подпишитесь на канал и перейдите в "Функции бота"
+
+![image](https://user-images.githubusercontent.com/51060911/178431719-36f0b28a-e8cf-434b-a76a-8187ffc8c784.png)
