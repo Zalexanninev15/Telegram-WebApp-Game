@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Угадай число</title>
+
+    <script src="telegram-web-app.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 99vh;
+            width: 100%;
+            font-family: sans-serif;
+            font-weight: bold;
+            /* background: #0e1621; */
+        }
+
+        .game {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-row-gap: 10px;
+            grid-column-gap: 10px;
+            width: 90vh;
+            height: 90vh;
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* background: #48426d;
+            color: #f0c38e; */
+            cursor: pointer;
+            transition-duration: 0.5s;
+            transition-property: transform;
+        }
+
+        .hidden:hover {
+            opacity: 1;
+            filter: brightness(98%);
+        }
+
+        .hidden:active,
+        .hidden:focus {
+            opacity: 1;
+            filter: brightness(98%);
+        }
+
+        .hidden>div {
+            transition: 500ms;
+            transition-property: opacity, transform;
+            opacity: 0;
+        }
+
+        #newgame {
+            display: none;
+            font-size: 20px;
+            /* background: #f1aa9b; */
+            /* color: #48426d; */
+            padding: 1em;
+            cursor: pointer;
+        }
+
+        #timer {
+            font-size: 20px;
+            padding: 1em;
+            cursor: pointer;
+        }
+
+
+        @media screen and (orientation: portrait) {
+            .game {
+                width: 90vw;
+                height: 90vw;
+            }
+
+            #newgame {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game">
+    </div>
+
+    <div id="timer">00</div>
+    <div id="newgame">
+        Сыграть еще раз
+    </div>
+</body>
+
+<script type="text/javascript">
+    let tg = window.Telegram.WebApp;
+
+    tg.expand();
+
+    document.body.style.background = tg.themeParams.bg_color ? tg.themeParams.bg_color : "#242f3d"
+    document.querySelector('#newgame').style.background = tg.themeParams.button_color ? tg.themeParams.button_color : "#5086bd";
+    document.querySelector('#newgame').style.color = tg.themeParams.button_text_color ? tg.themeParams.button_text_color : "#ffffff";
+
+    let first_card = '';
+    card_number = 16;
+    let game = document.querySelector('.game');
+    let newgame = document.getElementById('newgame');
+    let timer = document.getElementById("timer");
+    timer.style.color = tg.themeParams.button_color ? tg.themeParams.button_color : "#5289c1";
+
+    function randomInteger(min, max) {
+        let rand = min - 0.5 + Math.random() * (max - min + 1);
+        return Math.round(rand);
+    }
+
+    function create_game() {
+        let card_arr = [];
+        let new_numbs = [];
+
+        game.style.pointerEvents = "auto";
+        newgame.style.display = "none";
+        timer.style.display = "block";
+
+        for (let i = 0; i < card_number; i++) {
+            let div = document.createElement('div');
+            div.classList.add('card');
+            div.classList.add('hidden');
+            div.id = `card${i+1}`;
+
+            div.style.background = tg.themeParams.button_color ? tg.themeParams.button_color : "#5086bd";
+            div.style.color = tg.themeParams.button_text_color ? tg.themeParams.button_text_color : "#ffffff";
+
+            while (true) {
+                newone = randomInteger(1, card_number / 2);
+                if (new_numbs.indexOf(newone) == -1) {
+                    new_numbs.push(newone);
+                    break;
+                } else if (new_numbs.indexOf(newone) == new_numbs.lastIndexOf(newone)) {
+                    new_numbs.push(newone);
+                    break;
+                }
+            }
+
+            let in_div = document.createElement('div');
+            in_div.innerText = newone;
+
+            div.append(in_div)
+
+            div.addEventListener('click', function() {
+
+                if (!this.classList.contains('hidden'))
+                    return false;
+
+                game.style.pointerEvents = "none";
+                if (first_card == '') {
+                    first_card = this.id;
+                    this.classList.remove('hidden');
+                    game.style.pointerEvents = "auto";
+                } else {
+                    this.classList.remove('hidden');
+                    if (this.textContent == document.getElementById(first_card).textContent) {
+                        first_card = '';
+                        game.style.pointerEvents = "auto";
+                    } else {
+                        setTimeout(() => {
+                            document.getElementById(first_card).classList.add('hidden');
+                            this.classList.add('hidden');
+                            first_card = '';
+                            game.style.pointerEvents = "auto";
+                        }, 150);
+                    }
+
+                    let hidden_cards = document.getElementsByClassName("hidden");
+
+                    if (hidden_cards.length == 0) {
+                        newgame.innerText = 'Победа! Можете сыграть ещё раз.';
+                        game.style.pointerEvents = "none";
+                        newgame.style.opacity = 1;
+                        newgame.style.display = 'block';
+
+                        clearInt();
+                        newgame.addEventListener('click', remove_newgame);
+                    }
+                }
+            });
+
+            game.append(div);
+        }
+
+        function remove_newgame() {
+            // this.style.opacity = 0; // Скрытие кнопки
+            newgame.removeEventListener('click', remove_newgame);
+            game.innerHTML = '';
+            create_game()
+        }
+
+        timer.innerText = 30;
+
+        let timerI = setInterval(() => {
+            console.log('in interval')
+            if (+timer.innerText > 0) {
+                timer.innerText = timer.innerText - 1;
+            } else {
+                newgame.innerText = 'Время вышло. Хотите сыграть ещё раз?';
+                game.style.pointerEvents = "none";
+                newgame.style.display = "block";
+                newgame.addEventListener('click', remove_newgame);
+                clearInt();
+            }
+        }, 1000);
+
+        function clearInt() {
+            clearInterval(timerI);
+            timer.style.display = "none";
+        }
+    }
+
+    create_game();
+</script>
+
+</html>
