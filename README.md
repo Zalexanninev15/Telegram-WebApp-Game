@@ -10,7 +10,8 @@
 
 ## Gif
 
-SOON!
+СКОРО!
 
-## Description
-I created a simple game as an example for a WebApp for my bot in the Telegram messenger. You can also run it from a regular browser
+## Описание
+
+Я создал простую игру в качестве примера для веб-приложения для моего бота в мессенджере Telegram. Вы также можете запустить его из обычного браузера
