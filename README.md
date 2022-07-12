@@ -1,4 +1,4 @@
-# Telegram WebApp Game | 🔥[Play](https://zalexanninev15.github.io/Telegram-WebApp-Game/)
+# Telegram WebApp Game | 🔥[Играть](https://zalexanninev15.github.io/Telegram-WebApp-Game/)
 
 [![](https://img.shields.io/badge/platforms-All_with_Internet-27282D.svg)](https://github.com/Zalexanninev15/Telegram-WebApp-Game)
 [![](https://img.shields.io/badge/written_on-Java_Script-E34F26.svg?logo=javascript)](https://github.com/Zalexanninev15/Telegram-WebApp-Game)
