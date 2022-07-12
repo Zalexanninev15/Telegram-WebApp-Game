@@ -10,7 +10,7 @@
 
 ## Gif
 
-СКОРО!
+![](https://github.com/Zalexanninev15/Telegram-WebApp-Game/blob/main/demo.gif?raw=true)
 
 ## Описание
 
